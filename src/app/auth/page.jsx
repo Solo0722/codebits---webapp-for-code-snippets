@@ -1,8 +1,9 @@
 "use client";
-import IconifyIcon from "@/components/IconifyIcon";
-import { DASHBOARD } from "@/constants/routeNames";
-import { dm_serif } from "@/theme/fontConfig";
-import { Button, Checkbox, Divider, Form, Input } from "antd";
+import BackButton from "@/src/components/BackButton";
+import IconifyIcon from "@/src/components/IconifyIcon";
+import { routeNames } from "@/src/constants/constants";
+import { dm_serif } from "@/src/theme/fontConfig";
+import { Button, Checkbox, Divider, Form, Input, Space } from "antd";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -101,60 +102,75 @@ const Signin = () => {
 
   return (
     <SigninWrapper>
-      <Button
-        type="ghost"
-        shape="circle"
-        icon={<IconifyIcon name={"solar:arrow-left-outline"} />}
-        style={{ position: "absolute", top: "10px", left: "10px" }}
-        onClick={() => router.back()}
-      />
-      <FormWrapper>
-        <Wrapper pageIndex={pageIndex}>
-          <h3>{isSignup ? "Let's help you get started" : "Welcome back"}</h3>
-          <Form
-            form={form}
-            name="basic"
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="on"
-            layout="vertical"
-          >
-            {/* {pageIndex === 1 ? <AuthDetailsSection /> : <SignupComplete />} */}
-            <Form.Item>
-              <ButtonsWrapper>
-                <Button className="google-btn">
-                  <Image
-                    width={15}
-                    height={15}
-                    src="https://www.svgrepo.com/show/475656/google-color.svg"
-                    loading="lazy"
-                    alt="google logo"
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  Login with Google
-                </Button>
-                <Button icon={<IconifyIcon name="icomoon-free:github" />}>
-                  Login with Github
-                </Button>
-                <Button
-                  icon={<IconifyIcon name="solar:user-circle-outline" />}
-                  onClick={() => router.push(DASHBOARD)}
-                >
-                  Login as Guest
-                </Button>
-              </ButtonsWrapper>
-            </Form.Item>
-            <Divider plain orientation="center">
-              or
-            </Divider>
+      <LogoWrapper>
+        <Space
+          direction="horizontal"
+          size="small"
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          <Image src="/clickup.png" alt="clickup logo" width={20} height={20} />
+          <h5>
+            codebits<span className="logo-last">.dev</span>
+          </h5>
+        </Space>
+      </LogoWrapper>
+      {/* <BackButton
+        buttonStyle={{ position: "absolute", top: "10px", left: "10px" }}
+      /> */}
+      <ContentWrapper>
+        <HeroView></HeroView>
+        <FormView>
+          <FormWrapper>
+            <Wrapper pageIndex={pageIndex}>
+              <h3>
+                {isSignup ? "Let's help you get started" : "Welcome back"}
+              </h3>
+              <Form
+                form={form}
+                name="basic"
+                initialValues={{
+                  remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="on"
+                layout="vertical"
+              >
+                {/* {pageIndex === 1 ? <AuthDetailsSection /> : <SignupComplete />} */}
+                <Form.Item>
+                  <ButtonsWrapper>
+                    <Button className="google-btn">
+                      <Image
+                        width={15}
+                        height={15}
+                        src="https://www.svgrepo.com/show/475656/google-color.svg"
+                        loading="lazy"
+                        alt="google logo"
+                        style={{ marginRight: "0.5rem" }}
+                      />
+                      Login with Google
+                    </Button>
+                    <Button icon={<IconifyIcon name="icomoon-free:github" />}>
+                      Login with Github
+                    </Button>
+                    <Button
+                      icon={<IconifyIcon name="solar:user-circle-outline" />}
+                      onClick={() => router.push(routeNames.BLOGS)}
+                    >
+                      Login as Guest
+                    </Button>
+                  </ButtonsWrapper>
+                </Form.Item>
+                <Divider plain orientation="center">
+                  or
+                </Divider>
 
-            <AuthDetailsSection />
-          </Form>
-        </Wrapper>
-      </FormWrapper>
+                <AuthDetailsSection />
+              </Form>
+            </Wrapper>
+          </FormWrapper>
+        </FormView>
+      </ContentWrapper>
     </SigninWrapper>
   );
 };
@@ -168,21 +184,63 @@ const SigninWrapper = styled.main`
   justify-content: center;
 `;
 
+const LogoWrapper = styled.div`
+  width: 100%;
+  /* height: 60px; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+
+  & .logo-last {
+    color: ${({ theme }) => theme.primaryColor};
+  }
+`;
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const HeroView = styled.div`
+  width: 60%;
+  height: 100%;
+  background-color: blue;
+`;
+
+const FormView = styled.div`
+  width: 60%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-color: red; */
+`;
+
 const FormWrapper = styled.div`
-  width: 40%;
+  width: 80%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 7px;
   position: relative;
-  background-color: ${({ theme }) => theme.accentColor2};
+  /* background-color: ${({ theme }) => theme.accentColor2}; */
 
   & .input {
     background-color: transparent;
     border-radius: 7px;
-    background-color: ${({ theme }) => theme.bodyBackgroundColor};
+    background-color: ${({ theme }) => theme.accentColor1};
     /* font-size: 12px; */
+    padding: 8px 12px;
     border: none;
   }
 

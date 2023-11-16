@@ -5,6 +5,7 @@ import { Avatar, Button, Space } from "antd";
 import IconifyIcon from "./IconifyIcon";
 import { GlobalContext } from "../context/context";
 import { DARKTHEME, LIGHTTHEME } from "../constants/constants";
+import { dm_serif } from "@/src/theme/fontConfig";
 
 const Navbar = () => {
   const { appTheme, setAppTheme } = useContext(GlobalContext);
@@ -52,8 +53,10 @@ const NavbarWrapper = styled.nav`
   width: 100%;
   height: 60px;
   padding: 1rem;
-  /* border-bottom: 0.5px solid ${({ theme }) => theme.accentColor1}; */
-  /* box-shadow: rgba(255, 255, 255, 0.05) 0px 4px 10px; */
+  border-bottom: 0.5px solid ${({ theme }) => theme.accentColor1};
+  /* box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 10px; */
+  /* box-shadow: 0px 20px 50px 0px rgba(0, 0, 0, 0.05); */
+
   position: sticky;
   top: 0;
   z-index: 10;
@@ -66,6 +69,10 @@ const NavbarWrapper = styled.nav`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  & h3 {
+    font-family: ${dm_serif.style.fontFamily};
+  }
 `;
 
 const ToolsWrapper = styled.div`

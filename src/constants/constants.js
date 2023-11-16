@@ -2,49 +2,57 @@ export const LIGHTTHEME = "app_light_theme";
 export const DARKTHEME = "app_dark_theme";
 
 export const routeNames = {
-  DASHBOARD: "/app",
-  TOOLS: "/app/tools",
-  COMMUNITIES: "/app/settings",
+  BLOGS: "/app",
+  SNIPPETS: "/app/snippets",
+  PROMPTS: "/app/prompts",
+  DEBUGCODE: "/app/debug_code",
+  EXPLAINCODE: "/app/explain_code",
+  TRANSLATECODE: "/app/translate_code",
+  OPTIMIZECODE: "/app/optimize_code",
   SETTINGS: "/app/settings",
-  MYSNIPPETS: "/app/mysnippets",
 };
 
 export const sidebarMenu = [
   {
     name: "Blogs",
     iconName: "solar:home-2-bold",
-    route: routeNames.DASHBOARD,
+    route: routeNames.BLOGS,
   },
   {
     name: "Snippets",
     iconName: "solar:layers-bold",
-    route: routeNames.MYSNIPPETS,
+    route: routeNames.SNIPPETS,
   },
   {
     name: "Prompts",
     iconName: "solar:dialog-2-bold",
-    route: routeNames.COMMUNITIES,
+    route: routeNames.PROMPTS,
   },
 
   {
+    name: "Code with AI",
+    iconName: "solar:chat-line-bold",
+    route: routeNames.DEBUGCODE,
+  },
+  {
     name: "Debug code",
     iconName: "solar:bug-bold",
-    route: routeNames.COMMUNITIES,
+    route: routeNames.DEBUGCODE,
   },
   {
     name: "Explain code",
     iconName: "solar:chat-line-bold",
-    route: routeNames.COMMUNITIES,
+    route: routeNames.EXPLAINCODE,
   },
   {
     name: "Optimize code",
     iconName: "solar:bolt-circle-bold",
-    route: routeNames.COMMUNITIES,
+    route: routeNames.OPTIMIZECODE,
   },
   {
     name: "Translate code",
     iconName: "solar:text-field-focus-bold",
-    route: routeNames.COMMUNITIES,
+    route: routeNames.TRANSLATECODE,
   },
   {
     name: "Settings",

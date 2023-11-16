@@ -1,5 +1,9 @@
 export const defaultTheme = {
   primaryColor: "rgba(47, 128, 237, 1)",
+  success: "#22c55e",
+  error: "#ef4444",
+  danger: "#f43f5e",
+  warning: "#f97316",
   gradientColor: "linear-gradient(101deg,#070024,#7737e6 39.58%,#ec38bc)",
 };
 export const lightTheme = {
@@ -7,7 +11,7 @@ export const lightTheme = {
   bodyBackgroundColor: "#ffffff",
   textColor: "#12081c",
   textColor2: "#686879",
-  accentColor1: "#fafbfc",
+  accentColor1: "#f1f5f9",
   accentColor2: "#f8f8f8",
   accentColor3: "#ebedef",
 };

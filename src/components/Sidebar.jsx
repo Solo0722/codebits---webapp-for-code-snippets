@@ -16,13 +16,18 @@ const Sidebar = () => {
   return (
     <SidebarWrapper showFullSidebar={showFullSidebar}>
       <LogoWrapper>
-        <Image src="/clickup.png" alt="clickup logo" width={30} height={30} />
-
-        {showFullSidebar && (
-          <h4>
-            codebits<span className="logo-last">.dev</span>
-          </h4>
-        )}
+        <Space
+          direction="horizontal"
+          size="middle"
+          className={showFullSidebar ? "spacer" : "spacer mini-sidebar"}
+        >
+          <Image src="/clickup.png" alt="clickup logo" width={25} height={25} />
+          {showFullSidebar && (
+            <h4>
+              codebits<span className="logo-last">.dev</span>
+            </h4>
+          )}
+        </Space>
       </LogoWrapper>
       <LinksWrapper>
         {sidebarMenu.map((sidebarLink) => (
@@ -31,7 +36,11 @@ const Sidebar = () => {
             className={pathname == sidebarLink.route && "active"}
           >
             <Link href={sidebarLink.route} legacyBehavior>
-              <Space direction="horizontal" size="large" className="spacer">
+              <Space
+                direction="horizontal"
+                size="large"
+                className={showFullSidebar ? "spacer" : "spacer mini-sidebar"}
+              >
                 <div className="icon-wrapper">
                   <IconifyIcon name={sidebarLink.iconName} />
                 </div>
@@ -45,8 +54,12 @@ const Sidebar = () => {
       </LinksWrapper>
       <CollapseSidebarWrapper>
         <LinkWrapper onClick={() => setShowFullSidebar(!showFullSidebar)}>
-          <Space direction="horizontal" size="large" className="spacer">
-            <IconifyIcon name="solar:sidebar-minimalistic-outline" />
+          <Space
+            direction="horizontal"
+            size="large"
+            className={showFullSidebar ? "spacer" : "spacer mini-sidebar"}
+          >
+            <IconifyIcon name="solar:siderbar-bold" />
             {showFullSidebar && (
               <p style={{ margin: 0, padding: 0 }}>Collapse sidebar</p>
             )}
@@ -59,7 +72,7 @@ const Sidebar = () => {
 
 const SidebarWrapper = styled.aside`
   width: ${(props) => (props.showFullSidebar ? "240px" : "60px")};
-  padding: 0 1rem;
+  padding: 0 5px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -68,12 +81,24 @@ const SidebarWrapper = styled.aside`
   background-color: ${({ theme }) => theme.accentColor1};
   position: relative;
   transition: all 1s ease 0s;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+
+  & .spacer {
+    padding: 10px;
+    width: 100%;
+  }
+
+  & .mini-sidebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const LogoWrapper = styled.div`
   width: 100%;
   height: 60px;
-
+  padding: 1rem 0;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -82,14 +107,11 @@ const LogoWrapper = styled.div`
   & .logo-last {
     color: ${({ theme }) => theme.primaryColor};
   }
-
-  & h4 {
-    margin-left: 1rem;
-  }
 `;
 
 const LinksWrapper = styled.div`
   width: 100%;
+  padding-top: 1rem;
 
   & .active {
     background-color: ${({ theme }) => theme.primaryColor};
@@ -103,11 +125,6 @@ const LinkWrapper = styled.div`
   border-radius: 10px;
   cursor: pointer;
   color: ${({ theme }) => theme.textColor2};
-
-  & .spacer {
-    padding: 10px;
-    width: 100%;
-  }
 
   & .icon-wrapper {
     /* padding: 0 1rem; */
