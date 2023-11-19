@@ -59,7 +59,7 @@ const SimpleFilterTabs = (props) => {
 
 const TabsView = styled.div`
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 
   .active {
     background-color: ${({ theme }) => theme.primaryColor};

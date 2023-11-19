@@ -1,37 +1,104 @@
 "use client";
-import BackButton from "@/src/components/BackButton";
 import IconifyIcon from "@/src/components/IconifyIcon";
-import { routeNames } from "@/src/constants/constants";
+import {
+  DEFAULT_IMAGE_URI,
+  routeNames,
+  storageKeys,
+} from "@/src/constants/constants";
+import { GlobalContext } from "@/src/context/context";
+import { sanityClient } from "@/src/helpers/sanityClient";
+import { userQuery } from "@/src/helpers/sanityQueries";
+import { saveToLocalStorage } from "@/src/services/storageService";
+import { showMessage } from "@/src/services/uiServices";
 import { dm_serif } from "@/src/theme/fontConfig";
-import { Button, Checkbox, Divider, Form, Input, Space } from "antd";
+import { Button, Divider, Form, Input, Space } from "antd";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useState } from "react";
 import { styled } from "styled-components";
+import { v4 } from "uuid";
 
 const Signin = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [form] = Form.useForm();
   const [pageIndex, setPageIndex] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [isSignup, setIsSignup] = useState(
-    searchParams.get("type") === "signup"
-  );
+  const [isSignup, setIsSignup] = useState(true);
+
+  const { setCurrentUser } = useContext(GlobalContext);
+
+  const signUserUp = async (formData) => {
+    setLoading(true);
+    const doc = {
+      _id: v4(),
+      _type: "user",
+      ...formData,
+      fav_snippets: [],
+      fav_prompts: [],
+      fav_blogs: [],
+      userImg: DEFAULT_IMAGE_URI,
+    };
+
+    await sanityClient
+      .createIfNotExists(doc)
+      .then((result) => {
+        setLoading(false);
+        setCurrentUser(result);
+        showMessage({
+          messageType: "success",
+          content: "Sign up successful",
+        });
+        router.push(routeNames.BLOGS);
+      })
+      .catch((err) => {
+        setLoading(false);
+        showMessage({
+          messageType: "error",
+          content: "Sign up failed. Try again",
+        });
+      });
+  };
+
+  const signUserIn = async (formData) => {
+    setLoading(true);
+    const query = userQuery(formData.email, formData.password);
+    await sanityClient
+      .fetch(query)
+      .then((result) => {
+        setLoading(false);
+        setCurrentUser(result[0]);
+        showMessage({
+          messageType: "success",
+          content: "Sign in successful",
+        });
+        router.push(routeNames.BLOGS);
+      })
+      .catch((err) => {
+        setLoading(false);
+        showMessage({
+          messageType: "error",
+          content: "Sign in failed. Try again",
+        });
+      });
+  };
 
   const onFinish = async (values) => {
     console.log(values);
+    isSignup ? signUserUp(values) : signUserIn(values);
   };
 
   const onFinishFailed = (errorInfo) => {
-    // message.error(`Authentication failed!`);
+    showMessage({
+      content: `Authentication failed! ${errorInfo}`,
+      messageType: "error",
+    });
   };
 
   const AuthDetailsSection = () => (
     <>
       {isSignup && (
         <Form.Item
-          name={"full_name"}
+          name={"username"}
           rules={[
             {
               required: true,
@@ -40,7 +107,7 @@ const Signin = () => {
             },
           ]}
         >
-          <Input className="input" placeholder={"Full Name"} />
+          <Input className="input" placeholder={"Username"} />
         </Form.Item>
       )}
 

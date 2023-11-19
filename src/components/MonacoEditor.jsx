@@ -1,5 +1,5 @@
-import { Editor } from "@monaco-editor/react";
-import React from "react";
+import { Editor, useMonaco } from "@monaco-editor/react";
+import React, { useEffect } from "react";
 import { GlobalContext } from "../context/context";
 import { useContext } from "react";
 import { DARKTHEME } from "../constants/constants";
@@ -10,12 +10,18 @@ const MonacoEditor = ({
   hadleEditorChange,
   language,
   value,
+  canEdit,
+  handleEditorChange,
+  setEditorLanguages,
 }) => {
   const { appTheme } = useContext(GlobalContext);
+  const monaco = useMonaco();
 
-  function handleEditorChange(value, event) {
-    console.log("here is the current model value:", value);
-  }
+  useEffect(() => {
+    if (monaco) {
+      setEditorLanguages(monaco.languages.getLanguages());
+    }
+  }, [monaco]);
 
   return (
     <Editor
@@ -25,7 +31,11 @@ const MonacoEditor = ({
       language={language || defaultLanguage || "javascript"}
       defaultValue="//Add your code here"
       theme={appTheme === DARKTHEME ? "vs-dark" : "vs-light"}
-      onChange={handleEditorChange}
+      onChange={(value) => handleEditorChange(value)}
+      options={{
+        readOnly: !canEdit,
+      }}
+      className=""
     />
   );
 };

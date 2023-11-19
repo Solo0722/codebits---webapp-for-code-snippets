@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Searchbar from "./Searchbar";
 
-const HeroBanner = () => {
+const HeroBanner = ({ title, subtitle, searchbarPlaceholder }) => {
   return (
     <HeroBannerView>
       <h3>Find blogs about tech here</h3>

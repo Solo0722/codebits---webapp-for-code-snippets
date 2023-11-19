@@ -2,6 +2,8 @@ import React from "react";
 import { dm_sans } from "@/src/theme/fontConfig";
 import RootLayoutProvider from "../hocs/RootLayoutProvider";
 import GlobalProvider from "../context/context";
+import QueryProvider from "../hocs/QueryProvider";
+import GraphqlProvider from "../hocs/GrapqlProvider";
 
 export const metadata = {
   title: "Snipy",
@@ -15,9 +17,13 @@ const RootLayout = ({ children }) => {
   return (
     <html lang="en">
       <body className={dm_sans.className}>
-        <GlobalProvider>
-          <RootLayoutProvider>{children}</RootLayoutProvider>
-        </GlobalProvider>
+        <QueryProvider>
+          <GraphqlProvider>
+            <GlobalProvider>
+              <RootLayoutProvider>{children}</RootLayoutProvider>
+            </GlobalProvider>
+          </GraphqlProvider>
+        </QueryProvider>
       </body>
     </html>
   );

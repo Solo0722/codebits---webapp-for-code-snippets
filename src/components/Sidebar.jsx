@@ -11,7 +11,7 @@ import { useState } from "react";
 const Sidebar = () => {
   const pathname = usePathname();
 
-  const [showFullSidebar, setShowFullSidebar] = useState(false);
+  const [showFullSidebar, setShowFullSidebar] = useState(true);
 
   return (
     <SidebarWrapper showFullSidebar={showFullSidebar}>

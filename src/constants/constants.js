@@ -2,6 +2,8 @@ export const LIGHTTHEME = "app_light_theme";
 export const DARKTHEME = "app_dark_theme";
 
 export const routeNames = {
+  LANDING: "/",
+  AUTH: "/auth",
   BLOGS: "/app",
   SNIPPETS: "/app/snippets",
   PROMPTS: "/app/prompts",
@@ -60,3 +62,11 @@ export const sidebarMenu = [
     route: routeNames.SETTINGS,
   },
 ];
+
+export const DEFAULT_IMAGE_URI =
+  "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+export const storageKeys = {
+  USER: "codebits-current-user",
+  APP_THEME: "codebits-app-theme",
+};

@@ -6,9 +6,10 @@ import IconifyIcon from "./IconifyIcon";
 import { GlobalContext } from "../context/context";
 import { DARKTHEME, LIGHTTHEME } from "../constants/constants";
 import { dm_serif } from "@/src/theme/fontConfig";
+import DropDownContainer from "./DropDownContainer";
 
 const Navbar = () => {
-  const { appTheme, setAppTheme } = useContext(GlobalContext);
+  const { appTheme, setAppTheme, currentUser } = useContext(GlobalContext);
 
   const toggleTheme = () => {
     setAppTheme(appTheme === LIGHTTHEME ? DARKTHEME : LIGHTTHEME);
@@ -17,20 +18,31 @@ const Navbar = () => {
   return (
     <NavbarWrapper>
       {/* <Searchbar /> */}
-      <h3>Welcome back, Solomon</h3>
+      <h3>Welcome back, {currentUser?.username.split(" ")[0]}</h3>
       <ToolsWrapper>
+        {/* <DropDownContainer
+          menu={[
+            {
+              label: "My profile",
+              key: 0,
+            },
+            {
+              label: "Log out",
+              key: 1,
+            },
+          ]}
+          showArrow={false}
+        > */}
         <AvatarWrapper>
           <Space direction="horizontal" size={"small"}>
-            <Avatar
-              shape="square"
-              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-            />
+            <Avatar shape="square" src={currentUser?.userImg} />
             <Space size="0px" direction="vertical">
-              <p>Eric Bradley</p>
-              <small>Developer</small>
+              <p>{currentUser?.username}</p>
+              <small>{currentUser?.email}</small>
             </Space>
           </Space>
         </AvatarWrapper>
+        {/* </DropDownContainer> */}
         <Button
           type="text"
           icon={
@@ -95,6 +107,7 @@ const AvatarWrapper = styled.div`
   align-items: center;
   justify-content: flex-start;
   margin-right: 3rem;
+  cursor: pointer;
 
   & p {
     padding: 0rem;
