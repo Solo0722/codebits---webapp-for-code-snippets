@@ -1,11 +1,10 @@
 "use client";
 import BackButton from "@/src/components/BackButton";
 import LoadingSpinner from "@/src/components/LoadingSpinner";
-import MonacoEditor from "@/src/components/MonacoEditor";
 import ResultDisplay from "@/src/components/ResultDisplay";
 import { GlobalContext } from "@/src/context/context";
 import { sanityClient } from "@/src/helpers/sanityClient";
-import { snippetQuery } from "@/src/helpers/sanityQueries";
+import { promptQuery } from "@/src/helpers/sanityQueries";
 import { showMessage } from "@/src/services/uiServices";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -25,23 +24,24 @@ import React, { useState, useContext, useEffect } from "react";
 import { styled } from "styled-components";
 import capitalize from "lodash/capitalize";
 
-const CreateOrViewOrEditSnippet = ({ params }) => {
+const CreateOrViewOrEditPrompt = ({ params }) => {
   const [form] = Form.useForm();
-  const { snippetId } = params;
+  const { promptId } = params;
   const { currentUser } = useContext(GlobalContext);
   const [editorLanguages, setEditorLanguages] = useState([]);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [`snippet-${snippetId}`],
-    queryFn: () => fetchSnippetData(snippetId),
-    enabled: snippetId !== "create-snippet",
+    queryKey: [`prompt-${promptId}`],
+    queryFn: () => fetchPromptData(promptId),
+    enabled: promptId !== "create-prompt",
   });
 
-  const isNew = snippetId === "create-snippet";
+  const isNew = promptId === "create-prompt";
   const isEdit = currentUser._id === data?.creator._id;
   const isNewOrisEdit = isNew || isEdit;
-  const fetchSnippetData = async (snippetId) => {
-    const query = snippetQuery(snippetId);
+
+  const fetchPromptData = async (promptId) => {
+    const query = promptQuery(promptId);
     try {
       const res = await sanityClient.fetch(query);
       console.log(res);
@@ -51,14 +51,14 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
     }
   };
 
-  const createSnippet = async (snippetDoc) => {
+  const createPrompt = async (promptDoc) => {
     await sanityClient
-      .create(snippetDoc)
+      .create(promptDoc)
       .then((result) => {
         console.log(result);
         showMessage({
           messageType: "success",
-          content: "Snippet created successfully",
+          content: "Prompt created successfully",
         });
         form.resetFields();
       })
@@ -66,32 +66,32 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
         console.log(err);
         showMessage({
           messageType: "error",
-          content: "Snippet could not be created! Try again",
+          content: "Prompt could not be created! Try again",
         });
       });
   };
-  const updateSnippet = async (snippetDoc) => {
+  const updatePrompt = async (promptDoc) => {
     await sanityClient
-      .createOrReplace(snippetDoc)
+      .createOrReplace(promptDoc)
       .then((result) => {
         console.log(result);
         showMessage({
           messageType: "success",
-          content: "Snippet created successfully",
+          content: "Prompt created successfully",
         });
       })
       .catch((err) => {
         console.log(err);
         showMessage({
           messageType: "error",
-          content: "Snippet could not be created! Try again",
+          content: "Prompt could not be created! Try again",
         });
       });
   };
 
   const onFinish = (values) => {
     const doc = {
-      _type: "snippet",
+      _type: "prompt",
       ...values,
       creator: {
         _type: "user",
@@ -100,12 +100,12 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
     };
 
     if (isEdit) {
-      doc["_id"] = snippetId;
+      doc["_id"] = promptId;
     }
 
     console.log(doc);
 
-    isNew ? createSnippet(doc) : isEdit ? updateSnippet(doc) : null;
+    isNew ? createPrompt(doc) : isEdit ? updatePrompt(doc) : null;
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -125,12 +125,12 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
   }, [data]);
 
   return (
-    <CreateSnippetWrapper>
+    <CreatePromptWrapper>
       {isLoading ? (
         <LoadingSpinner />
       ) : isError ? (
         <ResultDisplay
-          title={"Error fetching snippet data!"}
+          title={"Error fetching prompt data!"}
           status={"error"}
           subTitle={"Try refreshing the page!"}
         />
@@ -141,7 +141,7 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
           <MainAreaWrapper>
             <Form
               form={form}
-              name="create-snippet-form"
+              name="create-prompt-form"
               initialValues={{
                 remember: true,
               }}
@@ -154,7 +154,7 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
               <TitleWrapper>
                 <Space size="small">
                   <BackButton />
-                  <h3>{isNew ? "Create Snippet" : data.snippetName}</h3>
+                  <h3>{isNew ? "Create Prompt" : data.promptName}</h3>
                   {!isNew && (
                     <span>
                       <small>by </small>
@@ -170,60 +170,34 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
                 <Space size="small">
                   {isNewOrisEdit && (
                     <Button className="btn-save" htmlType="submit">
-                      Save snippet
+                      Save prompt
                     </Button>
                   )}
                 </Space>
               </TitleWrapper>
               <Row gutter={16}>
-                <Col span={6}>
+                <Col span={8}>
                   <Form.Item
-                    label="Snippet name"
-                    name="snippetName"
-                    initialValue={!isNew ? data.snippetName : ""}
+                    label="Prompt name"
+                    name="promptName"
+                    initialValue={!isNew ? data.promptName : ""}
                     rules={[
                       {
                         required: true,
-                        message: "Invalid snippet name",
+                        message: "Invalid prompt name",
                         whitespace: true,
                       },
                     ]}
                   >
                     <Input
-                      // value={!isNew ? data.snippetName : ""}
-                      placeholder="What does your snippet do?"
+                      // value={!isNew ? data.promptName : ""}
+                      placeholder="What does your prompt do?"
                       readOnly={!isNewOrisEdit}
                     />
                   </Form.Item>
                 </Col>
-                <Col span={6}>
-                  <Form.Item
-                    label="Language"
-                    name="language"
-                    initialValue={
-                      !isNew ? lowerCase(data.language) : "javascript"
-                    }
-                    rules={[
-                      {
-                        required: true,
-                        message: "Invalid language",
-                        whitespace: true,
-                      },
-                    ]}
-                  >
-                    <Select
-                      placeholder="Select your language"
-                      showSearch
-                      disabled={!isNewOrisEdit}
-                      options={editorLanguages?.map((lang) => ({
-                        label: capitalize(lang.id),
-                        value: lang.id,
-                      }))}
-                      onChange={(e) => setSelectedLanguage(e)}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
+
+                <Col span={8}>
                   <Form.Item
                     label="Tag"
                     name="tag"
@@ -235,7 +209,7 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
                     />
                   </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={8}>
                   <Form.Item
                     label="Status"
                     name="status"
@@ -249,7 +223,7 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
                     ]}
                   >
                     <Select
-                      placeholder="Select snippet status"
+                      placeholder="Select prompt status"
                       disabled={!isNewOrisEdit}
                       options={[
                         {
@@ -266,29 +240,16 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
                 </Col>
               </Row>
               <Form.Item
-                label="Code"
-                name="code"
-                initialValue={!isNew ? data.code : ""}
+                label="Description"
+                name="notes"
+                initialValue={!isNew ? data.notes : ""}
                 rules={[
                   {
                     required: true,
-                    message: "Invalid code",
+                    message: "Invalid description",
                     whitespace: true,
                   },
                 ]}
-              >
-                <MonacoEditor
-                  value={form.getFieldValue("code")}
-                  handleEditorChange={(e) => form.setFieldValue("code", e)}
-                  language={selectedLanguage}
-                  canEdit={isNewOrisEdit}
-                  setEditorLanguages={setEditorLanguages}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Notes"
-                name="notes"
-                initialValue={!isNew ? data.notes : ""}
               >
                 <Input.TextArea
                   placeholder="Add any notes related to the code"
@@ -297,16 +258,23 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
                 />
               </Form.Item>
             </Form>
+            <Button className="run-prompt-btn">Run prompt</Button>
           </MainAreaWrapper>
         </>
       )}
-    </CreateSnippetWrapper>
+    </CreatePromptWrapper>
   );
 };
 
-const CreateSnippetWrapper = styled.section`
+const CreatePromptWrapper = styled.section`
   width: 100%;
   padding: 2rem;
+
+  & .run-prompt-btn {
+    background: ${({ theme }) => theme.primaryColor};
+    border: none;
+    color: #ffffff;
+  }
 `;
 
 const TitleWrapper = styled.div`
@@ -363,4 +331,4 @@ const MainAreaWrapper = styled.div`
   } */
 `;
 
-export default CreateOrViewOrEditSnippet;
+export default CreateOrViewOrEditPrompt;

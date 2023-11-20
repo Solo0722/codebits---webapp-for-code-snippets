@@ -1,15 +1,22 @@
 import IconifyIcon from "@/src/components/IconifyIcon";
+import { routeNames } from "@/src/constants/constants";
 import { defaultTheme } from "@/src/theme/colors";
 import { Avatar, Button, Col, Space } from "antd";
+import moment from "moment";
+import { useRouter } from "next/navigation";
 import React from "react";
 import styled from "styled-components";
 
-const PromptCard = () => {
+const PromptCard = ({ item }) => {
+  const router = useRouter();
+
   return (
-    <PromptCardWrapper>
+    <PromptCardWrapper
+      onClick={() => router.push(`${routeNames.PROMPTS}/${item._id}`)}
+    >
       <Space size={5} direction="vertical" style={{ width: "100%" }}>
         <div className="titlebar">
-          <h4>Dark mode toggle</h4>
+          <h4>{item.promptName}</h4>
           <Space size={5} direction="horizontal">
             <Button
               icon={<IconifyIcon name={"solar:heart-outline"} />}
@@ -30,11 +37,8 @@ const PromptCard = () => {
             />
           </Space>
         </div>
-        <small>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae porro
-          animi ipsum quidem nostrum ullam qui. Reiciendis at fugiat officiis.
-        </small>
-        <small>#javascript</small>
+        <small>{item.notes.substring(0, 200)}</small>
+        <small>#{item.tag}</small>
         <div className="footerbar">
           <Space
             size={2}
@@ -42,9 +46,9 @@ const PromptCard = () => {
             style={{ alignItems: "center" }}
           >
             <Avatar size={"small"} />
-            <small>Solomon</small>
+            <small>{item.creator.username}</small>
           </Space>
-          <small>24th November 2023</small>
+          <small>{moment(item._createdAt).format("Do MMMM YYYY")}</small>
         </div>
       </Space>
     </PromptCardWrapper>

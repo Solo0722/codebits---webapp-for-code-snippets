@@ -51,9 +51,44 @@ export const snippetQuery = (snippetId) => {
 
 export const promptsQuery = (userId) => {
   const query = userId
-    ? `*[_type == 'prompt' && creator._ref == '${userId}']`
-    : `*[_type == 'prompt']`;
+    ? `*[_type == 'prompt' && creator._ref == '${userId}']{
+      _id,
+      _createdAt,
+      promptName,
+      notes,
+      tag,
+      creator -> {
+        username,
+        userImg
+      }
+    }`
+    : `*[_type == 'prompt']{
+      _id,
+      _createdAt,
+      promptName,
+      notes,
+      tag,
+      creator -> {
+        username,
+        userImg
+      }
+    }`;
   return query;
 };
 
-export const promptQuery = (promptId) => {};
+export const promptQuery = (promptId) => {
+  const query = `*[_type == 'prompt' && _id == '${promptId}']{
+    _id,
+      _createdAt,
+      promptName,
+      notes,
+      tag,
+      status,
+      creator -> {
+        username,
+        _id,
+        userImg
+      }
+  }`;
+  return query;
+};
