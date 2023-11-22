@@ -18,10 +18,10 @@ const MonacoEditor = ({
   const monaco = useMonaco();
 
   useEffect(() => {
-    if (monaco) {
+    if (monaco && setEditorLanguages) {
       setEditorLanguages(monaco.languages.getLanguages());
     }
-  }, [monaco]);
+  }, [monaco, setEditorLanguages]);
 
   return (
     <Editor

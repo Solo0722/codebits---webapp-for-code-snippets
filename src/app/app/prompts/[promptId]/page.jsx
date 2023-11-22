@@ -77,14 +77,14 @@ const CreateOrViewOrEditPrompt = ({ params }) => {
         console.log(result);
         showMessage({
           messageType: "success",
-          content: "Prompt created successfully",
+          content: "Prompt updated successfully",
         });
       })
       .catch((err) => {
         console.log(err);
         showMessage({
           messageType: "error",
-          content: "Prompt could not be created! Try again",
+          content: "Prompt could not be updated! Try again",
         });
       });
   };
@@ -155,17 +155,6 @@ const CreateOrViewOrEditPrompt = ({ params }) => {
                 <Space size="small">
                   <BackButton />
                   <h3>{isNew ? "Create Prompt" : data.promptName}</h3>
-                  {!isNew && (
-                    <span>
-                      <small>by </small>
-                      <Avatar
-                        size={"small"}
-                        src={data.creator.userImg}
-                        alt={data.creator.username}
-                      />{" "}
-                      <small>{data.creator.username}</small>
-                    </span>
-                  )}
                 </Space>
                 <Space size="small">
                   {isNewOrisEdit && (

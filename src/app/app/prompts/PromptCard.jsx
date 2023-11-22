@@ -17,6 +17,10 @@ const PromptCard = ({ item }) => {
       <Space size={5} direction="vertical" style={{ width: "100%" }}>
         <div className="titlebar">
           <h4>{item.promptName}</h4>
+        </div>
+        <small>{item.notes.substring(0, 200)}</small>
+        <small>#{item.tag}</small>
+        <div className="footerbar">
           <Space size={5} direction="horizontal">
             <Button
               icon={<IconifyIcon name={"solar:heart-outline"} />}
@@ -35,18 +39,6 @@ const PromptCard = ({ item }) => {
               }}
               // onClick={() => router.back()}
             />
-          </Space>
-        </div>
-        <small>{item.notes.substring(0, 200)}</small>
-        <small>#{item.tag}</small>
-        <div className="footerbar">
-          <Space
-            size={2}
-            direction="horizontal"
-            style={{ alignItems: "center" }}
-          >
-            <Avatar size={"small"} />
-            <small>{item.creator.username}</small>
           </Space>
           <small>{moment(item._createdAt).format("Do MMMM YYYY")}</small>
         </div>

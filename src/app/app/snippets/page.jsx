@@ -20,7 +20,7 @@ const Snippets = () => {
   const { currentUser } = useContext(GlobalContext);
 
   const fetchSnippets = async (userId) => {
-    const query = userId ? snippetsQuery(userId) : snippetsQuery();
+    const query = snippetsQuery(userId);
     try {
       const results = await sanityClient.fetch(query);
       return results;
@@ -35,11 +35,6 @@ const Snippets = () => {
 
   const getSelectedTabDetails = (tab) => {
     switch (tab) {
-      case "my-snippets":
-        return {
-          queryKey: "my-snippets",
-          queryFn: () => fetchSnippets(currentUser._id),
-        };
       case "my-favorites":
         return {
           queryKey: "my-favorites",
@@ -48,12 +43,12 @@ const Snippets = () => {
       case "all":
         return {
           queryKey: "snippets",
-          queryFn: () => fetchSnippets(),
+          queryFn: () => fetchSnippets(currentUser._id),
         };
       default:
         return {
           queryKey: "snippets",
-          queryFn: () => fetchSnippets(),
+          queryFn: () => fetchSnippets(currentUser._id),
         };
     }
   };
@@ -109,7 +104,6 @@ const Snippets = () => {
           <SimpleFilterTabs
             topTabList={[
               { name: "All", id: "all" },
-              { name: "My snippets", id: "my-snippets" },
               { name: "My favorites", id: "my-favorites" },
             ]}
             bottomTabList={[]}
@@ -133,6 +127,7 @@ const SnippetsView = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 2rem;
 `;
 
 const ContentWrapper = styled.div`

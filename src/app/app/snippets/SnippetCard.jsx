@@ -17,6 +17,10 @@ const SnippetCard = ({ item }) => {
       <Space size={5} direction="vertical" style={{ width: "100%" }}>
         <div className="titlebar">
           <h4>{item.snippetName}</h4>
+        </div>
+        {item?.notes && <small>{item.notes.substring(0, 100)}</small>}
+        <small>#{item.tag}</small>
+        <div className="footerbar">
           <Space size={5} direction="horizontal">
             <Button
               icon={<IconifyIcon name={"solar:heart-outline"} />}
@@ -35,22 +39,6 @@ const SnippetCard = ({ item }) => {
               }}
               // onClick={() => router.back()}
             />
-          </Space>
-        </div>
-        <small>{item.notes.substring(0, 100)}</small>
-        <small>#{item.tag}</small>
-        <div className="footerbar">
-          <Space
-            size={2}
-            direction="horizontal"
-            style={{ alignItems: "center" }}
-          >
-            <Avatar
-              size={"small"}
-              src={item.creator.userImg}
-              alt={item.creator.username}
-            />
-            <small>{item.creator.username}</small>
           </Space>
           <small>{moment(item._createdAt).format("Do MMMM YYYY")}</small>
         </div>
@@ -76,7 +64,7 @@ const SnippetCardWrapper = styled.div`
 
   &:hover {
     transform: scale(1.001);
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(100, 100, 111, 0.1) 0px 4px 4px 0px;
   }
 
   & .titlebar,

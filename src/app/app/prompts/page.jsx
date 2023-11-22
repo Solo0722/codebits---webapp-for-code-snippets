@@ -20,7 +20,7 @@ const Prompts = () => {
   const { currentUser } = useContext(GlobalContext);
 
   const fetchPrompts = async (userId) => {
-    const query = userId ? promptsQuery(userId) : promptsQuery();
+    const query = promptsQuery(userId);
     try {
       const results = await sanityClient.fetch(query);
       console.log(results);
@@ -36,11 +36,6 @@ const Prompts = () => {
 
   const getSelectedTabDetails = (tab) => {
     switch (tab) {
-      case "my-prompts":
-        return {
-          queryKey: "my-prompts",
-          queryFn: () => fetchPrompts(currentUser._id),
-        };
       case "my-favorites":
         return {
           queryKey: "my-favorite-prompts",
@@ -49,12 +44,12 @@ const Prompts = () => {
       case "all":
         return {
           queryKey: "prompts",
-          queryFn: () => fetchPrompts(),
+          queryFn: () => fetchPrompts(currentUser._id),
         };
       default:
         return {
           queryKey: "prompts",
-          queryFn: () => fetchPrompts(),
+          queryFn: () => fetchPrompts(currentUser._id),
         };
     }
   };
@@ -110,7 +105,6 @@ const Prompts = () => {
           <SimpleFilterTabs
             topTabList={[
               { name: "All", id: "all" },
-              { name: "My prompts", id: "my-prompts" },
               { name: "My favorites", id: "my-favorites" },
             ]}
             bottomTabList={[]}
@@ -134,6 +128,7 @@ const PromptsView = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 2rem;
 `;
 
 const ContentWrapper = styled.div`

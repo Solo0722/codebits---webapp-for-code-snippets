@@ -77,14 +77,14 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
         console.log(result);
         showMessage({
           messageType: "success",
-          content: "Snippet created successfully",
+          content: "Snippet updated successfully",
         });
       })
       .catch((err) => {
         console.log(err);
         showMessage({
           messageType: "error",
-          content: "Snippet could not be created! Try again",
+          content: "Snippet could not be updated! Try again",
         });
       });
   };
@@ -155,17 +155,6 @@ const CreateOrViewOrEditSnippet = ({ params }) => {
                 <Space size="small">
                   <BackButton />
                   <h3>{isNew ? "Create Snippet" : data.snippetName}</h3>
-                  {!isNew && (
-                    <span>
-                      <small>by </small>
-                      <Avatar
-                        size={"small"}
-                        src={data.creator.userImg}
-                        alt={data.creator.username}
-                      />{" "}
-                      <small>{data.creator.username}</small>
-                    </span>
-                  )}
                 </Space>
                 <Space size="small">
                   {isNewOrisEdit && (
